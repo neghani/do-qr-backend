@@ -1,4 +1,21 @@
-how to run your Docker-based Node.js application, including setting up Docker Compose for containerization, here's a step-by-step guide. This guide assumes you have already Docker and Docker Compose installed on your machine.
+
+**Tech Stack Overview: Visitor Management System**
+
+-   **Backend Framework**: Node.js with Express.js
+-   **Database**: MySQL (via Sequelize ORM)
+-   **Authentication**: JWT (JSON Web Tokens) for token-based authentication
+-   **Password Hashing**: bcrypt for secure password hashing
+-   **API Documentation**: Swagger (optional, if used for API documentation)
+-   **Containerization**: Docker for containerization
+-   **Environment Configuration**: Docker Compose for managing multi-container Docker applications
+-   **Testing**: Postman for API testing and development
+-   **Additional Libraries**:
+    -   `sequelize` for ORM operations with MySQL
+    -   `jsonwebtoken` for generating and verifying JWT tokens
+    -   `bcrypt` for password hashing and validation
+
+
+How to run your Docker-based Node.js application, including setting up Docker Compose for containerization, here's a step-by-step guide. This guide assumes you have already Docker and Docker Compose installed on your machine.
 
 ### 1\. Dockerfile
 

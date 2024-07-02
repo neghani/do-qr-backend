@@ -1,0 +1,116 @@
+openapi: 3.0.0
+info:
+  title: Visitor Management System API
+  description: API documentation for managing visitors, properties, units, and permissions.
+  version: 1.0.0
+servers:
+  - url: { base_url }
+paths:
+  /auth/signup:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                mobile:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: User registered successfully
+        "400":
+          description: Invalid request data
+
+  /auth/login:
+    post:
+      summary: Authenticate user and generate JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: JWT token generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        "401":
+          description: Unauthorized
+
+  /properties:
+    post:
+      summary: Create a new property
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                propertyName:
+                  type: string
+                address:
+                  type: string
+                city:
+                  type: string
+                state:
+                  type: string
+                zipcode:
+                  type: string
+      responses:
+        "201":
+          description: Property created successfully
+        "400":
+          description: Invalid request data
+
+    get:
+      summary: Retrieve all properties
+      responses:
+        "200":
+          description: List of properties
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Property"
+
+components:
+  schemas:
+    Property:
+      type: object
+      properties:
+        id:
+          type: string
+        propertyName:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zipcode:
+          type: string
