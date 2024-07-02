@@ -12,4 +12,4 @@ COPY . .
 EXPOSE 3000
 
 # Run the App
-CMD npm start
+CMD npm dev

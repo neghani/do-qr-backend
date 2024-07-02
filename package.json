@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "tsc && node dist/server.js",
+    "dev": "nodemon --watch src/** --ext 'ts,json' --ignore src/**/*.spec.ts --exec ts-node src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -13,7 +14,22 @@
     "@sequelize/mysql": "^7.0.0-alpha.41",
     "@types/express": "^4.17.21",
     "@types/node": "^20.14.9",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
     "sequelize": "^6.37.3",
-    "typescript": "^5.5.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.2",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/jest": "^29.5.12",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/supertest": "^6.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.1.5"
   }
 }

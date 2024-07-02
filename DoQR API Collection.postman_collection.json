@@ -1,0 +1,266 @@
+{
+	"info": {
+		"_postman_id": "79a068c9-10e3-416a-97a8-d39385b12e83",
+		"name": "DoQR API Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "698319"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"email\": \"johndoe@example.com\",\n    \"mobile\": \"1234567890\",\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "http://{{base_url}}/auth/signup",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"johndoe@example.com\",\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "http://{{base_url}}/auth/login",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{base_url}}/user/profile",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Properties",
+			"item": [
+				{
+					"name": "Create Property",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"propertyName\": \"Sample Property\",\n    \"address\": \"123 Main St\",\n    \"city\": \"Sample City\",\n    \"state\": \"Sample State\",\n    \"zipcode\": \"12345\"\n}"
+						},
+						"url": {
+							"raw": "http://{{base_url}}/properties",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Properties",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{base_url}}/properties",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"properties"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Units",
+			"item": [
+				{
+					"name": "Create Unit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"unitNumber\": \"101\",\n    \"propertyId\": \"property_id_here\",\n    \"userId\": \"user_id_here\",\n    \"floorNumber\": 1,\n    \"squareFeet\": 1000,\n    \"numberOfBedrooms\": 2,\n    \"numberOfBathrooms\": 1,\n    \"occupied\": true,\n    \"rentAmount\": 1200,\n    \"leaseStart\": \"2024-07-05\",\n    \"leaseEnd\": \"2025-07-05\"\n}"
+						},
+						"url": {
+							"raw": "http://{{base_url}}/units",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"units"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Units",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{base_url}}/units",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"units"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Visits",
+			"item": [
+				{
+					"name": "Create Visit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"visitorMobile\": \"1234567890\",\n    \"visitorEmail\": \"visitor@example.com\",\n    \"employeeId\": \"employee_id_here\",\n    \"propertyId\": \"property_id_here\",\n    \"unitId\": \"unit_id_here\",\n    \"visitDateTime\": \"2024-07-05T10:00:00Z\",\n    \"purpose\": \"Meeting\",\n    \"status\": \"Scheduled\"\n}"
+						},
+						"url": {
+							"raw": "http://{{base_url}}/visits",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"visits"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Visits",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{base_url}}/visits",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"visits"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Permissions",
+			"item": [
+				{
+					"name": "Assign Permission",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"groupId\": \"group_id_here\",\n    \"roleId\": \"role_id_here\",\n    \"userId\": \"user_id_here\"\n}"
+						},
+						"url": {
+							"raw": "http://{{base_url}}/permissions",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"permissions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Permissions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{base_url}}/permissions",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"permissions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
