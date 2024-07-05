@@ -17,6 +17,7 @@ class PropertyController {
       const {
         propertyName,
         address,
+        ownerId,
         city,
         state,
         zipCode,
@@ -27,6 +28,7 @@ class PropertyController {
       } = req.body;
       const property = await Property.create({
         id: uuidv4(),
+        ownerId,
         propertyName,
         address,
         city,
@@ -63,6 +65,7 @@ class PropertyController {
         propertyName,
         address,
         city,
+        ownerId,
         state,
         zipCode,
         numberOfUnits,
@@ -76,6 +79,7 @@ class PropertyController {
       }
       property.propertyName = propertyName;
       property.address = address;
+      property.ownerId = ownerId;
       property.city = city;
       property.state = state;
       property.zipCode = zipCode;

@@ -6,11 +6,6 @@ export const createPermission = async (req: Request, res: Response) => {
   try {
     const { userId, role, groupId } = req.body;
 
-    // Example of role authorization check
-    if (!req.user.roles.includes("admin")) {
-      return res.status(403).json({ message: "Unauthorized" });
-    }
-
     const permission = await Permission.create({
       id: uuidv4(),
       userId,
@@ -48,6 +43,21 @@ export const getPermissionById = async (req: Request, res: Response) => {
   }
 };
 
+export const getPermissionByUserId = async (userId: string) => {
+  try {
+    const permission = await Permission.findOne({
+      where: { userId },
+    });
+
+    if (!permission) {
+      return "No Permission";
+    }
+
+    return permission;
+  } catch (error: any) {
+    return "error while fetching permissions";
+  }
+};
 export const updatePermission = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;

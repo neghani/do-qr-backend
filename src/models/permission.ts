@@ -1,12 +1,15 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database';
-import User from './user';
-
+// models/Permission.ts
+import { Model, DataTypes } from "sequelize";
+import sequelize from "../config/database";
+import User from "./user";
+import Property from "./property";
 class Permission extends Model {
   public id!: string;
-  public userId!: string;
-  public role!: string; // Change roleId to role
   public groupId!: string;
+  public role!: string;
+  public userId!: string;
+  public createdAt!: Date;
+  public updatedAt!: Date;
 }
 
 Permission.init(
@@ -16,25 +19,43 @@ Permission.init(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    userId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
-    role: {
-      type: DataTypes.STRING, // Use string type for role
-      allowNull: false,
-    },
     groupId: {
       type: DataTypes.UUID,
       allowNull: false,
+      references: {
+        model: Property,
+        key: "id",
+      },
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: User,
+        key: "id",
+      },
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
   },
   {
     sequelize,
-    modelName: 'Permission',
+    modelName: "Permission",
   }
 );
 
-Permission.belongsTo(User, { foreignKey: 'userId' });
-
+Permission.belongsTo(User, { foreignKey: "userId" });
+Permission.belongsTo(Property, { foreignKey: "groupId" });
 export default Permission;

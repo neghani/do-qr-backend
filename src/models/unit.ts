@@ -1,12 +1,14 @@
+// models/Unit.ts
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database';
-import User from './user'; // Assuming you have a User model for registered users
+import User from './user';
+import Property from './property';
 
 class Unit extends Model {
   public id!: string;
   public unitNumber!: string;
-  public propertyId!: number;
-  public userId!: number;
+  public propertyId!: string;
+  public userId!: string;
   public floorNumber!: number;
   public squareFeet!: number;
   public numberOfBedrooms!: number;
@@ -15,11 +17,6 @@ class Unit extends Model {
   public rentAmount!: number;
   public leaseStart!: Date;
   public leaseEnd!: Date;
-  public occupants?: string[]; // Array of user IDs for occupants
-
-  // Optional associations
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
 }
 
 Unit.init(
@@ -34,19 +31,27 @@ Unit.init(
       allowNull: false,
     },
     propertyId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
+      references: {
+        model:Property,
+        key: 'id',
+      },
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
+      references: {
+        model: User,
+        key: 'id',
+      },
     },
     floorNumber: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
     squareFeet: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
     numberOfBedrooms: {
@@ -60,9 +65,10 @@ Unit.init(
     occupied: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
     },
     rentAmount: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
     leaseStart: {
@@ -73,20 +79,15 @@ Unit.init(
       type: DataTypes.DATE,
       allowNull: false,
     },
-    occupants: {
-      type: DataTypes.ARRAY(DataTypes.UUID),
-      allowNull: true,
-      defaultValue: [],
-      references: {
-        model: User,
-        key: 'id',
-      },
-    },
   },
   {
     sequelize,
     modelName: 'Unit',
   }
 );
+
+// Define associations
+Unit.belongsTo(User, { foreignKey: 'userId' });
+Unit.belongsTo(Property, { foreignKey: 'propertyId' });
 
 export default Unit;

@@ -139,7 +139,6 @@ export const removeOccupant = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { userId } = req.body;
-
     const unit: any = await Unit.findByPk(id);
 
     if (!unit) {

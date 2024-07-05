@@ -2,6 +2,8 @@ import { Router, Request, Response } from "express";
 import User from "../models/user";
 import { generateToken, verifyToken } from "../utils/jwt";
 import { v4 as uuidv4 } from "uuid";
+import Permission from "../models/permission";
+import { Op } from "sequelize";
 
 const router = Router();
 // Signup route
@@ -10,14 +12,7 @@ router.post("/signup", async (req: Request, res: Response) => {
   const { firstName, lastName, email, mobile, password, dateOfBirth } =
     req.body;
 
-  if (
-    !firstName ||
-    !lastName ||
-    !email ||
-    !mobile ||
-    !password ||
-    !dateOfBirth
-  ) {
+  if ((!email || !mobile) && !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -43,12 +38,10 @@ router.post("/signup", async (req: Request, res: Response) => {
 
     // Save the user
     await user.save();
-
     // Generate a token for the user
     const token = generateToken({
       id: user.id,
-      groupID: "1224343",
-      roles: "Admin",
+      details: user,
     });
 
     res.status(201).json({ message: "User created successfully", token });
@@ -61,11 +54,29 @@ router.post("/signup", async (req: Request, res: Response) => {
 
 // Login route
 router.post("/login", async (req: Request, res: Response) => {
-  const { mobile, password } = req.body;
+  const { username, password, groupId } = req.body;
 
+  if (!username || !password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
   try {
     // Find the user by mobile number
-    const user = await User.findOne({ where: { mobile } });
+    const user = await User.findOne({
+      where: {
+        [Op.or]: [
+          {
+            email: {
+              $eq: username,
+            },
+          },
+          {
+            mobile: {
+              $eq: username,
+            },
+          },
+        ],
+      },
+    });
     if (!user) {
       return res
         .status(400)
@@ -76,17 +87,22 @@ router.post("/login", async (req: Request, res: Response) => {
     if (!isMatch) {
       return res
         .status(400)
-        .json({ message: "Invalid mobile number or password" });
+        .json({ message: "Invalid mobile/email number or password" });
     }
+    const userId = user.id;
 
-    // Generate a token for the user
-    const token = generateToken({
-      id: user.id,
-      groupID: "1224343",
-      roles: "Admin",
+    const permissions = await Permission.findAll({
+      where: { userId, groupId },
+      attributes: ["role"],
     });
 
-    res.status(201).json({ message: "User created successfully", token });
+    const token = generateToken({
+      id: user.id,
+      details: user,
+      permissions: permissions,
+    });
+
+    res.status(201).json({ message: "User logged in successfully", token });
   } catch (error: any) {
     res
       .status(500)

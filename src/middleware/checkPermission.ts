@@ -19,7 +19,6 @@ export default function checkPermission(roles: [any], groups: string[]) {
           .status(403)
           .json({ message: "Forbidden: Insufficient permissions" });
       }
-
       next();
     } catch (error: any) {
       res.status(500).json({ message: error.message });

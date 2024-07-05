@@ -6,20 +6,20 @@ import {
   updatePermission,
   deletePermission,
 } from "../controllers/permissionController";
-import { authenticateToken, authorizeRole } from "../middleware/auth";
+import { authenticateToken, authorizeRole, checkAdmin } from "../middleware/auth";
 const router = Router();
 
-router.post("/", authenticateToken, authorizeRole(["admin"]), createPermission);
+router.post("/", checkAdmin(),createPermission);
 router.get(
   "/",
   authenticateToken,
-  authorizeRole(["admin", "user"]),
+  
   getPermissions
 );
 router.get(
   "/:id",
   authenticateToken,
-  authorizeRole(["admin", "user"]),
+  authorizeRole(["admin"]),
   getPermissionById
 );
 router.put(

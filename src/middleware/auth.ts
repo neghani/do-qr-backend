@@ -20,15 +20,29 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction
 ) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-  if (token == null) return res.sendStatus(401); // If no token, return Unauthorized
+  try {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+    if (token == null) return res.sendStatus(401); // If no token, return Unauthorized
 
-  jwt.verify(token, secret, (err, decoded) => {
-    if (err) return res.sendStatus(403); // If token is invalid, return Forbidden
-    req.user = decoded as DecodedToken;
+    jwt.verify(token, secret, (err, decoded) => {
+      if (err) return res.sendStatus(403); // If token is invalid, return Forbidden
+      req.user = decoded as DecodedToken;
+      next();
+    });
+  } catch (error) {
+    res.sendStatus(403);
+  }
+};
+
+export const checkAdmin = () => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user.details?.isAdmin) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
     next();
-  });
+  };
 };
 
 export const authorizeRole = (roles: string[]) => {

@@ -4,12 +4,15 @@ import bcrypt from "bcrypt";
 
 interface UserAttributes {
   id: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
   mobile: string;
   password: string;
-  dateOfBirth: Date;
+  isAdmin?: boolean;
+  dateOfBirth?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
@@ -25,11 +28,11 @@ class User
   public mobile!: string;
   public password!: string;
   public dateOfBirth!: Date;
-
+  public createdAt!: Date;
+  public updatedAt!: Date;
+  public isAdmin!: boolean;
   // Method to compare the provided password with the stored hash
   public async comparePassword(password: string): Promise<boolean> {
-    console.log(this);
-
     return await bcrypt.compare(password, this.dataValues.password);
   }
 }
@@ -59,6 +62,11 @@ User.init(
       allowNull: false,
       unique: true,
     },
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -71,6 +79,16 @@ User.init(
     dateOfBirth: {
       type: DataTypes.DATE,
       allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
   },
   {

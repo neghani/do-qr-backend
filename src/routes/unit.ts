@@ -4,47 +4,38 @@ import {
   addOccupant,
   removeOccupant,
 } from "../controllers/unit";
-import { authenticateToken, authorizeRole } from "../middleware/auth";
+import { authenticateToken, authorizeRole,checkAdmin } from "../middleware/auth";
 
 const router = Router();
 const controller = new UnitController();
 
 // CRUD operations for units with token authentication
-router.get(
-  "/",
-  authenticateToken,
-  authorizeRole(["admin"]),
-  controller.getAllUnits
-);
+router.get("/", authenticateToken, controller.getAllUnits);
+router.get("/:id", authenticateToken, controller.getUnitById);
+
 router.post(
   "/",
   authenticateToken,
-  authorizeRole(["admin"]),
+  checkAdmin(),
   controller.createUnit
-);
-router.get(
-  "/:id",
-  authenticateToken,
-  authorizeRole(["admin"]),
-  controller.getUnitById
 );
 router.put(
   "/:id",
   authenticateToken,
-  authorizeRole(["admin"]),
+  checkAdmin(),
   controller.updateUnit
 );
 router.delete(
   "/:id",
   authenticateToken,
-  authorizeRole(["admin"]),
+  checkAdmin(),
   controller.deleteUnit
 );
 
 router.post(
   "/:id/add-occupant",
   authenticateToken,
-  authorizeRole(["admin"]),
+  checkAdmin(),
   addOccupant
 );
 
@@ -52,7 +43,7 @@ router.post(
 router.delete(
   "/:id/remove-occupant",
   authenticateToken,
-  authorizeRole(["admin"]),
+  checkAdmin(),
   removeOccupant
 );
 

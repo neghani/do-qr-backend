@@ -4,14 +4,15 @@ const secret = process.env.JWT_SECRET || "your_secret_key";
 
 export const generateToken = (user: {
   id: string;
-  groupID: string;
-  roles: string;
+  details?: any;
+  permissions?: any;
 }) => {
+  console.log("details", user.details);
+
   return jwt.sign(
     {
-      id: user.id,
-      groupID: user.groupID,
-      roles: user.roles,
+      details: user.details,
+      groupedPermissions: user.permissions,
     },
     secret,
     { expiresIn: "1h" }
@@ -25,5 +26,3 @@ export const verifyToken = (token: string) => {
     throw new Error("Invalid token");
   }
 };
-
-
