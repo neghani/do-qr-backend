@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import cors from "cors";
+
 import express, { Application, Request, Response } from "express";
 import bodyParser from "body-parser";
 import sequelize from "./config/database";
@@ -12,6 +14,9 @@ import visitRoutes from "./routes/visit";
 import healthRoutes from "./routes/health";
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
+
+
+app.use(cors());
 
 // Middleware to parse JSON bodies
 app.use(express.json());

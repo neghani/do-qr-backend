@@ -23,14 +23,22 @@ export const authenticateToken = (
   try {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
+    console.log(authHeader);
     if (token == null) return res.sendStatus(401); // If no token, return Unauthorized
 
     jwt.verify(token, secret, (err, decoded) => {
-      if (err) return res.sendStatus(403); // If token is invalid, return Forbidden
+      if (err) {
+        res.statusMessage = err.message;
+        return res.status(403);
+      }
       req.user = decoded as DecodedToken;
+      console.log("decoded", decoded);
+
       next();
     });
   } catch (error) {
+    console.log(error);
+
     res.sendStatus(403);
   }
 };

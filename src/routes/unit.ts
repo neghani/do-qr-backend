@@ -16,7 +16,6 @@ router.get("/:id", authenticateToken, controller.getUnitById);
 router.post(
   "/",
   authenticateToken,
-  checkAdmin(),
   controller.createUnit
 );
 router.put(

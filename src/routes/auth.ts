@@ -61,20 +61,11 @@ router.post("/login", async (req: Request, res: Response) => {
   }
   try {
     // Find the user by mobile number
+    console.log({ username, password });
+
     const user = await User.findOne({
       where: {
-        [Op.or]: [
-          {
-            email: {
-              $eq: username,
-            },
-          },
-          {
-            mobile: {
-              $eq: username,
-            },
-          },
-        ],
+        [Op.or]: [{ email: username }, { mobile: username }],
       },
     });
     if (!user) {
@@ -90,20 +81,22 @@ router.post("/login", async (req: Request, res: Response) => {
         .json({ message: "Invalid mobile/email number or password" });
     }
     const userId = user.id;
-
-    const permissions = await Permission.findAll({
-      where: { userId, groupId },
-      attributes: ["role"],
-    });
-
+    let permissions;
+    if (groupId) {
+      permissions = await Permission.findAll({
+        where: { userId, groupId },
+        attributes: ["role"],
+      });
+    }
     const token = generateToken({
       id: user.id,
       details: user,
       permissions: permissions,
     });
 
-    res.status(201).json({ message: "User logged in successfully", token });
+    res.status(200).json({ message: "User logged in successfully", token });
   } catch (error: any) {
+    console.log(error);
     res
       .status(500)
       .json({ message: "Internal server error", error: error.message });

@@ -6,8 +6,11 @@ class PropertyController {
   async getAllProperties(req: Request, res: Response) {
     try {
       const properties = await Property.findAll();
+      console.log("properties reached");
+      
       res.json(properties);
     } catch (error: any) {
+      
       res.status(500).json({ message: error.message });
     }
   }
