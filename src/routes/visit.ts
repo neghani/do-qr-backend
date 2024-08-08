@@ -11,10 +11,10 @@ import { authenticateToken, authorizeRole } from "../middleware/auth";
 const router = express.Router();
 
 // Routes for CRUD operations on visits
-router.post("/", authenticateToken, authorizeRole(["user"]), createVisit);
-router.get("/", authenticateToken, authorizeRole(["user"]), getVisits);
-router.get("/:id", authenticateToken, authorizeRole(["user"]), getVisitById);
-router.put("/:id", authenticateToken, authorizeRole(["user"]), updateVisit);
-router.delete("/:id", authenticateToken, authorizeRole(["user"]), deleteVisit);
+router.post("/", authenticateToken, createVisit);
+router.get("/", authenticateToken,  getVisits);
+router.get("/:id", authenticateToken, getVisitById);
+router.put("/:id", authenticateToken, updateVisit);
+router.delete("/:id", authenticateToken,  deleteVisit);
 
 export default router;

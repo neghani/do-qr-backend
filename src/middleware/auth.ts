@@ -55,24 +55,36 @@ export const checkAdmin = () => {
 
 export const authorizeRole = (roles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.user.userId;
+    const userId = req.user.id;
     const groupId = req.user.groupId;
-    const permissions = await Permission.findAll({
-      where: {
-        userId,
-        groupId,
-      },
-      attributes: ["role"], // Only select the role attribute
-    });
-
-    const dbRoles = permissions.map((permission) => permission.role);
-
-    const hasRequiredRole = roles.some((role) => dbRoles.includes(role));
-
-    if (!hasRequiredRole) {
-      return res.status(403).json({ message: "Forbidden" });
+    if (!userId) {
+      console.log("Invalid user ID:", userId);
+      return res.status(400).json({ message: "Invalid user ID" });
     }
-
-    next();
+    try {
+      const permissions = await Permission.findAll({
+        where: {
+          userId,
+          groupId,
+        },
+        attributes: ["role"], // Only select the role attribute
+      });
+  
+      const dbRoles = permissions.map((permission) => permission.role);
+  
+      const hasRequiredRole = roles.some((role) => dbRoles.includes(role));
+  
+      if (!hasRequiredRole) {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+  
+      next();
+    } catch (error) {
+      console.log("Error fetching permission", error);
+      res.status(500).json({message: "server error"})
+      
+    }
+    
   };
 };
+

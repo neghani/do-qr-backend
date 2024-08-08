@@ -1,16 +1,34 @@
 import { Request, Response } from "express";
 import Property from "../models/property";
 import { v4 as uuidv4 } from "uuid";
+import { Op } from "sequelize";
 
 class PropertyController {
   async getAllProperties(req: Request, res: Response) {
     try {
-      const properties = await Property.findAll();
-      console.log("properties reached");
-      
+      const { name, city, state } = req.query;
+      const whereClause: any = [];
+
+      if (name) {
+        whereClause.push({ propertyName: { [Op.like]: `%${name}%` } });
+      }
+      if (city) {
+        whereClause.push({ city: { [Op.like]: `%${city}%` } });
+      }
+      if (state) {
+        whereClause.push({ state: { [Op.like]: `%${state}%` } });
+      }
+
+      const query = whereClause.length > 0 ? { [Op.or]: whereClause } : {};
+
+      console.log("Constructed Query:", query);
+
+      const properties = await Property.findAll({ where: query });
+      console.log("Properties Fetched:", properties);
+
       res.json(properties);
     } catch (error: any) {
-      
+      console.log("Error:", error.message);
       res.status(500).json({ message: error.message });
     }
   }
@@ -20,7 +38,6 @@ class PropertyController {
       const {
         propertyName,
         address,
-        ownerId,
         city,
         state,
         zipCode,
@@ -29,6 +46,8 @@ class PropertyController {
         managerEmail,
         managerPhone,
       } = req.body;
+      const ownerId = req.user.details.id;
+
       const property = await Property.create({
         id: uuidv4(),
         ownerId,
@@ -68,14 +87,18 @@ class PropertyController {
         propertyName,
         address,
         city,
-        ownerId,
-        state,
+        // ownerId,
+        // state,
         zipCode,
         numberOfUnits,
         managerName,
         managerEmail,
         managerPhone,
       } = req.body;
+      console.log('Update Property ID:', id);
+    console.log('Update Payload:', req.body);
+    const ownerId = req.user.details.id;
+
       const property = await Property.findByPk(id);
       if (!property) {
         return res.status(404).json({ message: "Property not found" });
@@ -84,7 +107,7 @@ class PropertyController {
       property.address = address;
       property.ownerId = ownerId;
       property.city = city;
-      property.state = state;
+      // property.state = state;
       property.zipCode = zipCode;
       property.numberOfUnits = numberOfUnits;
       property.managerName = managerName;
@@ -93,6 +116,7 @@ class PropertyController {
       await property.save();
       res.json(property);
     } catch (error: any) {
+      console.error('Error updating property:', error);
       res.status(500).json({ message: error.message });
     }
   }

@@ -21,7 +21,7 @@ router.post(
 router.put(
   "/:id",
   authenticateToken,
-  checkAdmin(),
+  // checkAdmin(),
   controller.updateUnit
 );
 router.delete(
